@@ -30,6 +30,9 @@ export class Version extends BaseContent {
     @Column({ length: 64 })
     cron: string;
 
+    @Column({ length: 64 })
+    tenantId: string;
+
     @Column('int')
     isFreeze: number;
 }

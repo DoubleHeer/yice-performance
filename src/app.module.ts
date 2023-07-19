@@ -20,11 +20,11 @@ import { ChartModule } from './modules/chart/chart.module';
     imports: [
         TypeOrmModule.forRoot({
             type: 'mysql',
-            host: '127.0.0.1',
+            host: '172.30.64.27',
             port: 3306,
             username: 'root',
-            password: '123456',
-            database: 'yice-performance',
+            password: 'mysql57',
+            database: 'mysql',
             entities: [join(__dirname, '/**/*.entity{.ts,.js}')],
             timezone: '+08:00', // 东八区
             cache: {

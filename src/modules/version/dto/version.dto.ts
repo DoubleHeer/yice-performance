@@ -16,16 +16,19 @@ export class VersionDto {
     @MaxLength(256, { message: '版本名称最大长度为256' })
     readonly name: string;
 
-    @IsUrl({ protocols: ['http', 'https'], require_protocol: true }, { message: '检测地址无效' })
+    // @IsUrl(
+    //     { protocols: ['http', 'https'], require_protocol: true, require_host: false },
+    //     { message: '检测地址无效' }
+    // )
     @IsNotEmpty({ message: '检测地址不能为空' })
     @ApiPropertyOptional({ description: '检测地址' })
     @MaxLength(2048, { message: '检测地址最大长度为2048' })
     readonly url: string;
 
-    @IsUrl(
-        { protocols: ['http', 'https'], require_protocol: true },
-        { message: '登录页面地址无效' }
-    )
+    // @IsUrl(
+    //     { protocols: ['http', 'https'], require_protocol: true },
+    //     { message: '登录页面地址无效' }
+    // )
     @ApiPropertyOptional({ description: '登录页面地址，可选' })
     @MaxLength(2048, { message: '登录页面地址最大长度为2048' })
     readonly loginUrl: string;

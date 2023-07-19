@@ -23,7 +23,10 @@ export class TaskDto {
     readonly createAt?: Date;
 
     @IsOptional()
-    @IsUrl({ protocols: ['http', 'https'], require_protocol: true }, { message: '检测地址无效' })
+    // @IsUrl(
+    //     { protocols: ['http', 'https'], require_protocol: true, require_host: false },
+    //     { message: '检测地址无效' }
+    // )
     @MaxLength(2048, { message: '检测地址最大长度为2048' })
     @ApiPropertyOptional({ description: '检测地址' })
     url?: string;

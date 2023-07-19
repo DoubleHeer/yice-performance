@@ -30,7 +30,7 @@ export default function VersionModal(props: IProps) {
         if (open) {
             form.resetFields();
             isEdit && getVersion();
-            getShiLis();
+            // getShiLis();
         }
     }, [open]);
 
@@ -96,7 +96,7 @@ export default function VersionModal(props: IProps) {
             const params = Object.keys(values)
                 .filter((key) => values[key] !== '')
                 .reduce((acc, key) => ({ ...acc, [key]: values[key] }), {});
-
+            console.log(params);
             API[isEdit ? 'updateVersion' : 'createVersion']({
                 ...params,
                 projectId,
@@ -186,7 +186,7 @@ export default function VersionModal(props: IProps) {
                             </Select>
                         </Form.Item>
                     ) : null}
-                    <Form.Item name="devopsShiLiId" label="绑定实例">
+                    {/* <Form.Item name="devopsShiLiId" label="绑定实例">
                         <Select
                             allowClear
                             placeholder="请选择绑定的 devops 实例"
@@ -195,7 +195,7 @@ export default function VersionModal(props: IProps) {
                             loading={shiliFetching}
                             onSelect={handleSelect}
                         />
-                    </Form.Item>
+                    </Form.Item> */}
                     <Form.Item name="name" label="版本名称" rules={[{ required: true }]}>
                         <Input
                             allowClear
@@ -221,6 +221,9 @@ export default function VersionModal(props: IProps) {
                     </Form.Item>
                     <Form.Item name="password" label="用户密码">
                         <Input allowClear placeholder="请输入用户密码" />
+                    </Form.Item>
+                    <Form.Item name="tenantId" label="租户ID">
+                        <Input allowClear placeholder="请输入租户ID" />
                     </Form.Item>
                 </Form>
             </Spin>

@@ -22,7 +22,7 @@ const lhConfig = {
         // onlyAudits: ['first-contentful-paint'],
         formFactor: 'desktop',
         throttling: {
-            rttMs: 0, // 网络延迟，单位 ms
+            rttMs: 200, // 网络延迟，单位 ms
             throughputKbps: 10 * 1024,
             cpuSlowdownMultiplier: 1,
             requestLatencyMs: 0, // 0 means unset
