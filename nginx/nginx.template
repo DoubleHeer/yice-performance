@@ -1,0 +1,94 @@
+user  root;
+worker_processes  1;
+worker_rlimit_nofile 10000;
+
+
+error_log   /server/logs/error.log warn;
+pid        /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+    #==告诉nginx收到一个新链接通知后接受尽可能多的链接
+    multi_accept on;
+    #==设置用于复用客户端线程的轮训方法
+    use epoll;
+}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '${DOLLER}remote_addr - ${DOLLER}remote_user [${DOLLER}time_local] "${DOLLER}request" '
+                      '${DOLLER}status ${DOLLER}body_bytes_sent "${DOLLER}http_referer" '
+                      '"${DOLLER}http_user_agent" "${DOLLER}http_x_forwarded_for"';
+
+    access_log  /server/logs/access.log  main;
+    server_tokens       on;
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    charset UTF-8;
+
+    gzip                on;
+    gzip_http_version 1.0;
+    gzip_static on;
+    gzip_disable "msie6";
+    gzip_min_length 100k;
+    gzip_buffers 4 16k;
+    gzip_comp_level 3;
+    gzip_types text/plain application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+    gzip_vary on;
+
+
+    map ${DOLLER}http_upgrade ${DOLLER}connection_upgrade {
+     default upgrade;
+     '' close;
+    }
+
+    server {
+     listen       9999;
+
+     location / {
+       add_header Cache-Control no-cache;
+       root   /server/dist/;
+       index index.html index.htm;
+       try_files ${DOLLER}uri ${DOLLER}uri/ /index.html;
+    }
+
+    location /html{
+       add_header Cache-Control no-cache;
+       alias  /server/html/;
+       index index.html index.htm;
+    }
+
+
+    location /i/ {
+         proxy_pass ${SERVICE_URL};
+         proxy_set_header Host ${DOLLER}proxy_host;
+         proxy_set_header X-Real-IP ${DOLLER}remote_addr;
+         proxy_set_header X-Forwarded-For ${DOLLER}proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Host ${DOLLER}http_host;
+         proxy_set_header X-Forwarded-Port ${DOLLER}server_port;
+         proxy_set_header X-Forwarded-Proto ${DOLLER}scheme;
+         proxy_set_header X-Nginx-ReForwarded "true";
+    }
+
+    location /ws/ {
+          proxy_pass ${SERVICE_URL};
+          proxy_set_header Host ${DOLLER}proxy_host;
+          proxy_set_header X-Real-IP ${DOLLER}remote_addr;
+          proxy_set_header X-Forwarded-For ${DOLLER}proxy_add_x_forwarded_for;
+          proxy_set_header Via "nginx";
+          proxy_connect_timeout 600;
+          proxy_read_timeout 600;
+          proxy_send_timeout 600;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade ${DOLLER}http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_set_header X-Nginx-ReForwarded "true";
+    }
+  }
+}
